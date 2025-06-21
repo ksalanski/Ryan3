@@ -348,7 +348,7 @@ function drawResponsiveSummary() {
   textAlign(CENTER);
   textStyle(BOLD);
   textSize(constrain(width * 0.016, 12, 20));
-  text("Leć dalej!", continueButtonX + buttonWidth/2, buttonY + buttonHeight/2 + 5);
+  text("Finalizacja!", continueButtonX + buttonWidth/2, buttonY + buttonHeight/2 + 5);
 }
 
 function drawWebNotification() {
