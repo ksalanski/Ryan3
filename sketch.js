@@ -2,10 +2,12 @@
 let checkboxPas = false;
 let checkboxToaleta = false;
 let showSummary = false;
+let showFinalScreen = false; // Add this new variable
 let selectedSeat = null;
 let seats = [];
 let logoImg;
-let sadBgImg; // Add this new variable
+let sadBgImg;
+let finalImg; // Add this new variable
 
 // Zmienne dla powiadomień web
 let notificationY = -100;
@@ -19,6 +21,7 @@ function preload() {
   // Ładowanie logo z GitHub
   logoImg = loadImage('https://raw.githubusercontent.com/cooqieez/rajansrer/refs/heads/main/logo_w.png');
   sadBgImg = loadImage('https://raw.githubusercontent.com/ksalanski/sryanair3/refs/heads/main/samolot.png');
+  finalImg = loadImage('https://raw.githubusercontent.com/ksalanski/Ryan3/refs/heads/main/samolot-finisz.png');
 }
 
 function setup() {
@@ -60,18 +63,23 @@ function setupSeats() {
 }
 
 function draw() {
-  background(246, 246, 246); // Add this line for a consistent background
-  drawResponsiveHeader();
+  background(246, 246, 246);
   
-  if (!showSummary) {
-    drawResponsiveBlueContainer();
-    drawResponsiveContinueButton();
+  if (showFinalScreen) {
+    drawFinalScreen();
   } else {
-    drawResponsiveSummary();
-  }
-  
-  if (showWebNotification) {
-    drawWebNotification();
+    drawResponsiveHeader();
+    
+    if (!showSummary) {
+      drawResponsiveBlueContainer();
+      drawResponsiveContinueButton();
+    } else {
+      drawResponsiveSummary();
+    }
+    
+    if (showWebNotification) {
+      drawWebNotification();
+    }
   }
 }
 
@@ -351,6 +359,22 @@ function drawResponsiveSummary() {
   text("Finalizacja!", continueButtonX + buttonWidth/2, buttonY + buttonHeight/2 + 5);
 }
 
+function drawFinalScreen() {
+  if (finalImg) {
+    // Fill the entire screen with the image
+    imageMode(CORNER);
+    image(finalImg, 0, 0, width, height);
+  } else {
+    // Fallback if image doesn't load
+    background(0);
+    fill(255);
+    textAlign(CENTER);
+    textSize(48);
+    textStyle(BOLD);
+    text("Cyrograf Podpisany!", width/2, height/2);
+  }
+}
+
 function drawWebNotification() {
   // Wymiary powiadomienia - centered
   let notifWidth = constrain(width * 0.35, 300, 500);
@@ -545,7 +569,7 @@ function mousePressed() {
   }
   
   // Główna logika - gdy powiadomienie nie jest aktywne
-  if (!showSummary) {
+  if (!showSummary && !showFinalScreen) {
     // Kliknięcie w miejsca
     for (let i = 0; i < seats.length; i++) {
       let seat = seats[i];
@@ -613,6 +637,18 @@ function mousePressed() {
         mouseY > buttonY && mouseY < buttonY + buttonHeight) {
       showSummary = true;
     }
+  } else if (showFinalScreen) {
+    // Logika dla ekranu końcowego
+    let buttonWidth = constrain(width * 0.12, 100, 200);
+    let buttonHeight = constrain(height * 0.05, 35, 70);
+    let buttonY = height - buttonHeight - height * 0.02;
+    
+    // Przycisk powrotu
+    if (mouseX > width * 0.05 && mouseX < width * 0.05 + buttonWidth && 
+        mouseY > buttonY && mouseY < buttonY + buttonHeight) {
+      // Powrót do ekranu podsumowania
+      showFinalScreen = false;
+    }
   } else {
     // Button dimensions
     let buttonWidth = constrain(width * 0.12, 100, 200);
@@ -629,8 +665,8 @@ function mousePressed() {
     let continueButtonX = width - buttonWidth - width * 0.05;
     if (mouseX > continueButtonX && mouseX < continueButtonX + buttonWidth && 
         mouseY > buttonY && mouseY < buttonY + buttonHeight) {
-      // Add your action here - maybe show a final confirmation or redirect
-      console.log("Flight booked!");
+      // Show final screen instead of console.log
+      showFinalScreen = true;
     }
   }
 }
