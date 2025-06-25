@@ -8,6 +8,12 @@ let seats = [];
 let logoImg;
 let sadBgImg;
 let finalImg; // Add this new variable
+let destChosen;
+let originChosen;
+let priceChosen = 10028;
+let departureDate;
+let returnDate;
+let peopleCount;
 
 // Zmienne dla powiadomień web
 let notificationY = -100;
@@ -327,6 +333,10 @@ function drawResponsiveSummary() {
   
   text("Opłata za grawitację: 10 PLN", width * 0.05, y);
   total += 10;
+  y += lineHeight;
+  
+   text("Masz co chciałeś: 10028 PLN", width * 0.05, y);
+  total += 10028;
   y += lineHeight;
   
   fill(241, 201, 51);
